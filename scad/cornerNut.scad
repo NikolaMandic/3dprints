@@ -39,8 +39,18 @@ module nut2(type = 2, r1 = 16, r2 = 21, r3 = 30, s = 6, n = 7, h = 100/5, t = 8/
 	difference(){
 union(){
 	difference() {
+	rotate([0,0,45])
+		
+		cylinder($fn = 4, r = r3, h = h);
+		translate([ 0, 0, -h/2 ]) screw(type, r1, r2, n, h*2, t*2);
+	}
+	rotate([90,0,90])
+
+translate([0,h/2,-h/2])
+	difference() {
 		cylinder($fn = s, r = r3, h = h);
 		translate([ 0, 0, -h/2 ]) screw(type, r1, r2, n, h*2, t*2);
+
 	}
 
 	rotate([90,0,0])
@@ -50,10 +60,21 @@ translate([0,h/2,-h/2])
 		cylinder($fn = s, r = r3, h = h);
 		translate([ 0, 0, -h/2 ]) screw(type, r1, r2, n, h*2, t*2);
 
-	}}
-	translate([ 0, 0, -h/2 ]) screw(type, r1, r2, n, h*2, t*2);
-		rotate([-90,0,0])translate([0, -h/2,-h/2])translate([ 0, 0, -h/2 ])screw(type, r1, r2, n, h*2, t*2);
+	}
 }
+	translate([ 0, 0, -h/2 ]) 
+		screw(type, r1, r2, n, h*2, t*2);
+	rotate([-90,0,0])
+	translate([0, -h/2,-h/2])
+	translate([ 0, 0, -h/2 ])
+	screw(type, r1, r2, n, h*2, t*2);
+
+	rotate([-90,0,90])
+	translate([0, -h/2,-h/2])
+	translate([ 0, 0, -h/2 ])
+	screw(type, r1, r2, n, h*2, t*2);
+
+	}
 }
 module spring(r1 = 100, r2 = 10, h = 100, hr = 12)
 {
@@ -104,7 +125,14 @@ module stickScrew(l = [0,0,0],h=500,sh=100){
 		screw(h=sh);
 	}
 }
-
+module stickScrew2(l = [0,0,0],h=500,sh=100){
+	translate(l){
+		translate([ 0, 0, h ])
+		screw(h=sh);
+		cylinder($fn = 60, r = 20, h = h);
+		
+	}
+}
 
 
 module example001()
@@ -140,9 +168,44 @@ translate([-50,0,0])
 
 //scale([0.13,0.13,0.13])
 //screw();9
-rotate([0,0,0])
-scale(0.27,0.27,0.27)
-nut2(h=100,t=8,s=6);
+//rotate([0,0,0])\
+module adapter(){
+translate([0,0,-1])
+	difference()
+	{
+		cylinder($fn = 60, r = 2, h = h-1);
+		translate([-5,0.75,0])
+		cube([10, 10, h], center = false);
+	}
+}
+h=50;
+//difference(){
+//	cylinder($fn = 60, r = 3, h = h-5);
+//	adapter();
+//}
+//scale(0.27,0.27,0.27)
+//nut2(h=200,t=16,s=6,r3=50);
+//translate([0,0,-26])
+
+cylinder($fn = 60, r = 30, h = h);
+scale(0.25,0.25,0.25)
+stickScrew2(h=10);
+/*
+rotate([0,180,0])
+difference(){
+scale(0.25,0.25,0.25)
+stickScrew2(h=10);
+adapter();
+}
+*/
+/*
+difference(){
+scale(0.25,0.25,0.25)
+
+cylinder($fn = 60, r = 20, h = 6);
+adapter();
+}
+*/
 /*
 translate([ 0, 0, 0 ]){
 //size([30,0,0])
